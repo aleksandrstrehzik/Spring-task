@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import ru.clevertec.ecl.dto.GiftCertificateDto;
+import ru.clevertec.ecl.dto.TagDto;
 import ru.clevertec.ecl.repository.entity.GiftCertificate;
 import ru.clevertec.ecl.repository.entity.Tag;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,16 +18,17 @@ import java.util.List;
 @NoArgsConstructor(staticName = "aGift")
 @With
 @Getter
-public class GiftCertificateTestBuilder implements TestBuilder<GiftCertificate>{
+public class GiftCertificateTestBuilder implements TestBuilder<GiftCertificate>, TestDtoBuilder<GiftCertificateDto> {
 
     private Long id = 1L;
     private String name = "gift";
     private String description = "some description";
     private BigDecimal price = new BigDecimal("89.90");
     private Integer duration = 90;
-    private ZonedDateTime createDate = ZonedDateTime.now();
-    private ZonedDateTime lastUpdateDate = ZonedDateTime.now().plusDays(9L);
+    private Instant createDate = Instant.now();
+    private Instant lastUpdateDate = Instant.now().plusSeconds(1000000);
     private List<Tag> tags = new ArrayList<>();
+    private List<TagDto> tagDto = new ArrayList<>();
 
     @Override
     public GiftCertificate build() {
@@ -39,5 +42,17 @@ public class GiftCertificateTestBuilder implements TestBuilder<GiftCertificate>{
         giftCertificate.setLastUpdateDate(lastUpdateDate);
         giftCertificate.setTags(tags);
         return giftCertificate;
+    }
+
+    @Override
+    public GiftCertificateDto buildDto() {
+        final GiftCertificateDto giftCertificateDto = new GiftCertificateDto();
+        giftCertificateDto.setName(name);
+        giftCertificateDto.setDescription(description);
+        giftCertificateDto.setPrice(price);
+        giftCertificateDto.setDuration(duration);
+        giftCertificateDto.setCreateDate(createDate);
+        giftCertificateDto.setTags(tagDto);
+        return giftCertificateDto;
     }
 }

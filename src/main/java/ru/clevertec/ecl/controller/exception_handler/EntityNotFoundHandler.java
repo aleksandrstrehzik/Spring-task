@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.clevertec.ecl.exception.GiftCertificateNotFoundException;
 import ru.clevertec.ecl.exception.TagNotFoundException;
+import ru.clevertec.ecl.exception.UserNotFoundException;
 import ru.clevertec.ecl.exception.error_response.ErrorResponse;
 
 @ControllerAdvice
@@ -23,8 +24,17 @@ public class EntityNotFoundHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleTagNotFoundException(TagNotFoundException tagNotFound) {
         ErrorResponse response = ErrorResponse.builder()
-                .description("There is no gift certificate with" + tagNotFound.getWhy())
+                .description("There is no tag with" + tagNotFound.getWhy())
                 .code(tagNotFound.getCode())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException userNotFoundException) {
+        ErrorResponse response = ErrorResponse.builder()
+                .description("There is no user with" + userNotFoundException.getWhy())
+                .code(userNotFoundException.getCode())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }

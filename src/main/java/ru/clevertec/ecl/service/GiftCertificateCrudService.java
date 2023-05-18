@@ -1,6 +1,8 @@
 package ru.clevertec.ecl.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
 
 public interface GiftCertificateCrudService {
@@ -43,4 +45,14 @@ public interface GiftCertificateCrudService {
      */
     @Transactional
     GiftCertificateDto update(GiftCertificateDto giftDto);
+
+    /**
+     * Returns all certificates in the name of which there is a combination of
+     * letters specified in the name parameter
+     *
+     * @param name     Gift certificate part of the name
+     * @param pageable
+     * @return
+     */
+    Page<GiftCertificateDto> getAllOrAllByPartOfName(String name, Pageable pageable);
 }

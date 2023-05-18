@@ -1,15 +1,8 @@
 package ru.clevertec.ecl.exception;
 
-import lombok.Getter;
-
-@Getter
-public class GiftCertificateNotFoundException extends RuntimeException {
-
-   private final String why;
-   private final int code;
+public class GiftCertificateNotFoundException extends EntityNotFoundException {
 
     public GiftCertificateNotFoundException(String message, int code) {
-        this.why = message;
-        this.code = code;
+        super(message, code);
     }
 }
