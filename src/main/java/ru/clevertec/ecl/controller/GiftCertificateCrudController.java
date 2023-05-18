@@ -2,10 +2,13 @@ package ru.clevertec.ecl.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.ecl.dto.GiftCertificateDto;
+import ru.clevertec.ecl.dto.PageResponse;
 import ru.clevertec.ecl.service.GiftCertificateCrudService;
 
 @RestController
@@ -36,13 +39,19 @@ public class GiftCertificateCrudController {
     @PostMapping("/post")
     public ResponseEntity create(@RequestBody @Valid GiftCertificateDto giftDto) {
         giftCrudService.create(giftDto);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PatchMapping("/patch")
-    public ResponseEntity<GiftCertificateDto> update(@RequestBody @Valid GiftCertificateDto giftDto) {
+    public ResponseEntity<GiftCertificateDto> update(@RequestBody GiftCertificateDto giftDto) {
         GiftCertificateDto updateGift = giftCrudService.update(giftDto);
         return new ResponseEntity<>(updateGift, HttpStatus.OK);
     }
 
+    @GetMapping("/findAll")
+    public ResponseEntity<PageResponse<GiftCertificateDto>> getAll(@RequestParam(value = "name", required = false) String name,
+                                                                   Pageable pageable) {
+        Page<GiftCertificateDto> allOrAllByPartOfName = giftCrudService.getAllOrAllByPartOfName(name, pageable);
+        return new ResponseEntity<>(PageResponse.of(allOrAllByPartOfName), HttpStatus.OK);
+    }
 }

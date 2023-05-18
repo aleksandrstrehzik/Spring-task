@@ -1,12 +1,13 @@
 package ru.clevertec.ecl.repository.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,23 +18,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "gift_certificate")
+@EntityListeners(AuditingEntityListener.class)
 public class GiftCertificate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty(message = "name cannot be empty")
-    @Size(min = 2, max = 20, message = "message should be between 2 to 20")
     private String name;
     private String description;
     private BigDecimal price;
     private Integer duration;
+
     @Column(name = "create_date")
-    private ZonedDateTime createDate;
+    @CreatedDate
+    private Instant createDate;
+
     @Column(name = "last_update_date")
-    private ZonedDateTime lastUpdateDate;
-    @ManyToMany
+    @LastModifiedDate
+    private Instant lastUpdateDate;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "gift_certificate_tag",
             joinColumns = @JoinColumn(name = "gift_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
